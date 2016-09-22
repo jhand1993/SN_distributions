@@ -329,10 +329,11 @@ def weightmaker3D(arr2, arr3, bounds, datamap, simmap, wmap0=False, step1=1., st
 def z_mod(massarr, zarr, res=6):
     """
     Adds small mass offset to take into consideration dynamic host mass value with respect to redshift.
+    !!!!!!CURRENTLY NOT USED!!!!!!
     :param massarr: input mass sample
     :param zarr: input z sample
     :param res: number of z bins used to interpolate average offsets
-    :return:
+    :return: Modified host mass array.
     """
     massarr_copy = np.copy(massarr)
     zbins = np.linspace(min(datazcmb), max(datazcmb), res)
@@ -388,17 +389,18 @@ massx1cbounds = [7., 13., -4., 3., -0.3, 0.3]
 s = [0.5, 1., 0.1]
 
 # second input argument determines weight map iteration step
-if sys.argv[2] == 0:
-    megamasssamplefinal = masssample
-elif sys.argv[2] == 1:
+argv2 = int(sys.argv[2])  # cast second argv as int for comparison
+if argv2 == 0:
+    masssamplefinal = masssample
+elif argv2 == 1:
     sim1massx1cmap = digitize3D(sim1mass, sim1x1, sim1c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
     datamassx1cmap = digitize3D(datahostmass, datax1, datac, massx1cbounds, step1=s[0], step2=s[1], step3=s[2],
                                 norm=True)
     # weighted mass sample
     megamasssample1, wmap1 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim1massx1cmap,
                                            step1=s[0], step2=s[1], step3=s[2])
-    megamasssamplefinal = megamasssample1
-elif sys.argv[2] == 2:
+    masssamplefinal = megamasssample1
+elif argv2 == 2:
     sim1massx1cmap = digitize3D(sim1mass, sim1x1, sim1c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
     sim2massx1cmap = digitize3D(sim2mass, sim2x1, sim2c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
     datamassx1cmap = digitize3D(datahostmass, datax1, datac, massx1cbounds, step1=s[0], step2=s[1], step3=s[2],
@@ -410,7 +412,7 @@ elif sys.argv[2] == 2:
                                            wmap0=wmap1,
                                            step1=s[0], step2=s[1], step3=s[2])
     masssamplefinal = megamasssample2
-elif sys.argv[2] == 3:
+elif argv2 == 3:
     sim1massx1cmap = digitize3D(sim1mass, sim1x1, sim1c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
     sim2massx1cmap = digitize3D(sim2mass, sim2x1, sim2c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
     sim3massx1cmap = digitize3D(sim3mass, sim3x1, sim3c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)

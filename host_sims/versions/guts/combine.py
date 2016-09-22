@@ -23,6 +23,32 @@ for i in range(varscount):
         ids = np.copy(dragan[:, i])
     elif vars[i] == 'zCMB':
         zcmb = np.copy(dragan[:, i])
+    elif vars[i] == 'HOST_LOGMASS':
+        hostmass = np.copy(dragan[:, i])
+    elif vars[i] == 'c':
+        c = np.copy(dragan[:, i])
+    elif vars[i] == 'x1':
+        x1 = np.copy(dragan[:, i])
+    elif vars[i] == 'MURES':
+        mures = np.copy(dragan[:, i])
+
+# remove host_logmass < 7 from dragan data.
+bad_logmass = np.asarray([x >= 7. for x in hostmass])
+hostmass = hostmass[bad_logmass]
+zcmb = zcmb[bad_logmass]
+x1 = x1[bad_logmass]
+c = c[bad_logmass]
+mures = mures[bad_logmass]
+cidint = ids[bad_logmass]
+
+# remove mures > abs(10) from dragan data
+bad_mures = np.asarray([x < 10 for x in np.abs(mures)])
+hostmass = hostmass[bad_mures]
+zcmb = zcmb[bad_mures]
+x1 = x1[bad_mures]
+c = c[bad_mures]
+mures = mures[bad_mures]
+cidint = cidint[bad_mures]
 
 # count up IDSURVEY totals for IDSURVEY=1, 4, or 15
 sdss = 0

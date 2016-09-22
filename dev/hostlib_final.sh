@@ -17,9 +17,10 @@ for i in "${survs[@]}"
         # run SALT2mu.exe on fitres file
         SALT2mu.exe SALT2mu_"$i".default file=FITOPT000_"$i".FITRES prefix=JSH_WFIRST_"$i"_mures
     done
-# make unique directory for mures fitres files
+# make unique directory for mures fitres files and final analysis results
 TIME=$(date "+%m-%d-%y_%H_%M_%S")
 mkdir -p fitres/$TIME
+mkdir -p mures_plots/$TIME
 # rename and move final mures fitres files to TIME directory
 for i in "${survs[@]}"
     do
@@ -36,4 +37,4 @@ echo python3 hubbleres_combine.py
 python3 hubbleres_combine.py
 
 # create copy of mures/combine directory named TIME
-cp mures/combine mures/$TIME
+cp mures_plots/combine mures_plots/$TIME

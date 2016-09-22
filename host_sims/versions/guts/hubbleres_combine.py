@@ -535,6 +535,7 @@ fig_size = plt.rcParams['figure.figsize']
 fig_size[0] = 16.0
 fig_size[1] = 8.0
 zaxis = np.arange(0., 1., 0.1)
+
 # set decimal precision for plot annotations
 decimal.getcontext().prec = 2
 os.chdir(homedir + '/mures_plots/composite')
@@ -574,8 +575,6 @@ plt.xlabel('redshift')
 plt.ylabel('Hubble residual')
 plt.title('Sim')
 plt.legend(loc=1)
-# plt.text(0.02, myb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(np.nanmean(muresoffset)) + decimal.Decimal(0)),
-#          fontsize=16)
 plt.text(0.02, myb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(muresgoffset) + decimal.Decimal(0)),
          fontsize=16)
 """
@@ -602,8 +601,6 @@ plt.ylim(myb[0], myb[1])
 plt.xlabel('redshift')
 plt.title('Data')
 plt.legend(loc=1)
-# plt.text(0.02, myb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(np.nanmean(datamuresoffset)) + decimal.Decimal(0)),
-#          fontsize=16)
 plt.text(0.02, myb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(datamuresgoffset) + decimal.Decimal(0)),
          fontsize=16)
 """
@@ -651,10 +648,6 @@ plt.xlabel('redshift')
 plt.ylabel('mures')
 plt.title('Hubble Residual vs Redshift')
 plt.legend(loc=1)
-# plt.text(0.02, myb[1] * 0.9, 'Sim Offset Mean: ' + str(decimal.Decimal(np.nanmean(muresoffset)) + decimal.Decimal(0)),
-#          fontsize=16)
-# plt.text(0.02, myb[1] * 0.75, 'Obs Offset Mean: ' + str(decimal.Decimal(np.nanmean(datamuresoffset)) + decimal.Decimal(0)),
-#          fontsize=16)
 plt.text(0.02, myb[1] * 0.9, 'Sim Offset Mean: ' + str(decimal.Decimal(muresgoffset) + decimal.Decimal(0)),
          fontsize=16)
 plt.text(0.02, myb[1] * 0.75, 'Obs Offset Mean: ' + str(decimal.Decimal(datamuresgoffset) + decimal.Decimal(0)),
@@ -690,8 +683,6 @@ plt.ylabel('c')
 plt.title('Sim')
 plt.legend(loc=1)
 plt.ylim(cyb[0], cyb[1])
-# plt.text(0.02, cyb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(np.nanmean(coffset)) + decimal.Decimal(0)),
-#          fontsize=16)
 plt.text(0.02, cyb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(cgoffset) + decimal.Decimal(0)),
          fontsize=16)
 """
@@ -718,8 +709,6 @@ plt.xlabel('redshift')
 plt.title('Data')
 plt.legend(loc=1)
 plt.ylim(cyb[0], cyb[1])
-# plt.text(0.02, cyb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(np.nanmean(datacoffset)) + decimal.Decimal(0)),
-#          fontsize=16)
 plt.text(0.02, cyb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(datacgoffset) + decimal.Decimal(0)),
          fontsize=16)
 """
@@ -767,10 +756,6 @@ plt.ylabel('c')
 plt.title('Color vs Redshift')
 plt.legend(loc=1)
 plt.ylim(cyb[0], cyb[1])
-# plt.text(0.02, cyb[1] * 0.9, 'Sim Offset Mean: ' + str(decimal.Decimal(np.nanmean(coffset)) + decimal.Decimal(0)),
-#          fontsize=16)
-# plt.text(0.02, cyb[1] * 0.75, 'Obs Offset Mean: ' + str(decimal.Decimal(np.nanmean(datacoffset)) + decimal.Decimal(0)),
-#          fontsize=16)
 plt.text(0.02, cyb[1] * 0.9, 'Sim Offset Mean: ' + str(decimal.Decimal(cgoffset) + decimal.Decimal(0)),
          fontsize=16)
 plt.text(0.02, cyb[1] * 0.75, 'Obs Offset Mean: ' + str(decimal.Decimal(datacgoffset) + decimal.Decimal(0)),
@@ -806,8 +791,6 @@ plt.xlabel('redshift')
 plt.ylabel('x1')
 plt.title('Sim')
 plt.legend(loc=4)
-# plt.text(0.02, x1yb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(np.nanmean(x1offset)) + decimal.Decimal(0)),
-#          fontsize=16)
 plt.text(0.02, x1yb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(x1goffist) + decimal.Decimal(0)),
          fontsize=16)
 """
@@ -834,8 +817,6 @@ plt.ylim(x1yb[0], x1yb[1])
 plt.xlabel('redshift')
 plt.title('Data')
 plt.legend(loc=4)
-# plt.text(0.02, x1yb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(np.nanmean(datax1offset)) + decimal.Decimal(0)),
-#          fontsize=16)
 plt.text(0.02, x1yb[1] * 0.9, 'Offset Mean: ' + str(decimal.Decimal(datax1goffist) + decimal.Decimal(0)),
          fontsize=16)
 """
@@ -883,10 +864,6 @@ plt.xlabel('redshift')
 plt.ylabel('x1')
 plt.title('Stretch vs Redshift')
 plt.legend(loc=1)
-# plt.text(0.02, x1yb[1] * 0.9, 'Sim Offset Mean: ' + str(decimal.Decimal(np.nanmean(x1offset)) + decimal.Decimal(0)),
-#          fontsize=16)
-# plt.text(0.02, x1yb[1] * 0.75, 'Obs Offset Mean: ' + str(decimal.Decimal(np.nanmean(datax1offset)) + decimal.Decimal(0)),
-#          fontsize=16)
 plt.text(0.02, x1yb[1] * 0.9, 'Sim Offset Mean: ' + str(decimal.Decimal(x1goffist) + decimal.Decimal(0)),
          fontsize=16)
 plt.text(0.02, x1yb[1] * 0.75, 'Obs Offset Mean: ' + str(decimal.Decimal(datax1goffist) + decimal.Decimal(0)),
@@ -974,11 +951,13 @@ plt.show()
 plt.scatter(hostmass, mures, alpha=0.5)
 neg = np.empty(100)
 pos = np.empty(100)
-neg.fill(-0.04)
-pos.fill(0.04)
+# these are used to plot lines representing input mass step from config.
+neg.fill(-float(massstep))
+pos.fill(float(massstep))
 # bin mures with respect to mass
 muresbel, massbuttbel = avgbins(hostmassbel, muresbel, 0.5)
 muresabv, massbuttabv = avgbins(hostmassabv, muresabv, 0.5)
+# plot simulated and output mass step results.
 plt.scatter(massbuttabv, muresabv, color='green', s=50, marker='D', label='mass>10')
 plt.scatter(massbuttbel, muresbel, color='red', s=50, marker='D', label='mass<10')
 plt.plot(np.linspace(8, 12, 100), neg, color='green')
@@ -990,23 +969,3 @@ plt.ylabel('mures')
 plt.title('Host logmass vs mures')
 plt.savefig('massstep.png')
 plt.show()
-"""
-# plt.subplot(311)
-plt.scatter(zbins[1:6], muresoffset, color='red', marker='v', alpha=0.6, label='sim', s=50)
-plt.scatter(datazbins[1:6], datamuresoffset, marker='D', alpha=0.6, label='data', s=50)
-plt.legend()
-plt.title('Mures Difference vs Redshift')
-plt.show()
-
-plt.subplot(312)
-plt.scatter(zbins[1:6], coffset, color='red', marker='v', alpha=0.6, label='sim')
-plt.scatter(datazbins[1:6], datacoffset, marker='D', alpha=0.6, label='data')
-plt.legend()
-plt.title('Color Difference vs Redshift')
-plt.subplot(313)
-plt.scatter(zbins[1:6], x1offset, color='red', marker='v', alpha=0.6, label='sim')
-plt.scatter(datazbins[1:6], x1offset, marker='D', alpha=0.6, label='data')
-plt.legend()
-plt.title('Stretch Difference vs Redshift')
-plt.show()
-"""

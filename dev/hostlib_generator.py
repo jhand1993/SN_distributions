@@ -329,10 +329,11 @@ def weightmaker3D(arr2, arr3, bounds, datamap, simmap, wmap0=False, step1=1., st
 def z_mod(massarr, zarr, res=6):
     """
     Adds small mass offset to take into consideration dynamic host mass value with respect to redshift.
+    !!!!!!CURRENTLY NOT USED!!!!!!
     :param massarr: input mass sample
     :param zarr: input z sample
     :param res: number of z bins used to interpolate average offsets
-    :return:
+    :return: Modified host mass array.
     """
     massarr_copy = np.copy(massarr)
     zbins = np.linspace(min(datazcmb), max(datazcmb), res)

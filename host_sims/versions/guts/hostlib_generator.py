@@ -4,6 +4,9 @@ import scipy.interpolate as interp
 import sys
 from config import *
 
+# set random seed:
+np.random.seed(seed=12345)
+
 # G10 high-z values
 cp0 = [-0.054, 0.101, 0.043]  # cbar, csigpos, csigneg
 x1p0 = [0.973, 0.222, 1.472]  # x1bar, x1sigpos, s1signeg
@@ -22,7 +25,6 @@ x1p3 = [0.964, 0.282, 1.232]
 
 # important things?
 C = 1 / (2 * np.pi)
-sample = 30000
 
 
 class SurvError(Exception):
@@ -433,7 +435,7 @@ else:
     raise IterError('Must choose iteration number of 0, 1, 2, or 3.')
 # create HOSTLIB file
 os.chdir(homedir + '/hostlib/{}'.format(surv.lower()))
-hostlib = open('{}_WFIRST_{}.HOSTLIB'.format(init, surv), mode='w')
+hostlib = open('{}_{}_{}_{}.HOSTLIB'.format(init, hostlibsuffix,  surv, smeararg), mode='w')
 hostlib.write('NVAR: 7\n'
                 'VARNAMES: GALID ZTRUE c x1 LOGMASS_TRUE LOGMASS_OBS LOGMASS_ERR\n\n')
 

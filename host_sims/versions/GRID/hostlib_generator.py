@@ -25,8 +25,6 @@ x1p3 = [0.964, 0.282, 1.232]
 
 # important things?
 C = 1 / (2 * np.pi)
-sample = 30000
-
 
 class SurvError(Exception):
     # exception raised if survey id given as sys argv[1] is not in oksurvs
@@ -39,76 +37,109 @@ class IterError(Exception):
     def __init__(self, message):
         self.message = message
 
-oksurvs = ['SDSS', 'SNLS', 'PS1', 'LOWZ']
+class SmearError(Exception):
+    # exception raised if smear model is not C11 or G10
+    def __init__(self, message):
+        self.message = message
+
+
 surv = sys.argv[1]
+smeararg = sys.argv[3]
+# check smear model and survey name
 if surv not in oksurvs:
     raise SurvError('Survey ID not valid.')
-os.chdir(homedir + '/fitres/{}'.format(surv.lower()))
+if smeararg not in oksmear:
+    raise SmearError('Smear model not valid.')
+os.chdir(homedir + '/fitres/{}'.format(surv))
 
 # sim1 results
 fitres = '{}_WFIRST_{}1.fitres'.format(init, surv)
 with open(fitres, 'r') as f:
-    vars = f.readlines()[1]
+    for line in f:
+        if 'VARNAME' in line:
+            var = line
+            break
 with open(fitres, 'r') as f:
-    varscount = int(f.readlines()[0].split(' ')[1]) - 2
-vars = vars.split()
-vars.remove('VARNAMES:')
-vars.remove('FIELD')
+    for line in f:
+        if 'NVAR' in line:
+            varscount = int(line.split(' ')[1]) - 2
+            break
+var = var.split()
+var.remove('VARNAMES:')
+var.remove('FIELD')
 columns = tuple(list(range(1, 5)) + list(range(6, 40)))
 datasim1 = np.loadtxt(fitres, dtype=float, skiprows=12, usecols=columns)
 for i in range(varscount):
-    if vars[i] == 'HOST_LOGMASS':
+    if var[i] == 'HOST_LOGMASS':
         sim1mass = np.copy(datasim1[:, i])
-    elif vars[i] == 'x1':
+    elif var[i] == 'x1':
         sim1x1 = np.copy(datasim1[:, i])
-    elif vars[i] == 'c':
+    elif var[i] == 'c':
         sim1c = np.copy(datasim1[:, i])
 
 # sim2 results
 fitres = '{}_WFIRST_{}2.fitres'.format(init, surv)
 with open(fitres, 'r') as f:
-    vars = f.readlines()[1]
+    for line in f:
+        if 'VARNAME' in line:
+            var = line
+            break
 with open(fitres, 'r') as f:
-    varscount = int(f.readlines()[0].split(' ')[1]) - 2
-vars = vars.split()
-vars.remove('VARNAMES:')
-vars.remove('FIELD')
+    for line in f:
+        if 'NVAR' in line:
+            varscount = int(line.split(' ')[1]) - 2
+            break
+var = var.split()
+var.remove('VARNAMES:')
+var.remove('FIELD')
 columns = tuple(list(range(1, 5)) + list(range(6, 40)))
 datasim2 = np.loadtxt(fitres, dtype=float, skiprows=12, usecols=columns)
 for i in range(varscount):
-    if vars[i] == 'HOST_LOGMASS':
+    if var[i] == 'HOST_LOGMASS':
         sim2mass = np.copy(datasim2[:, i])
-    elif vars[i] == 'x1':
+    elif var[i] == 'x1':
         sim2x1 = np.copy(datasim2[:, i])
-    elif vars[i] == 'c':
+    elif var[i] == 'c':
         sim2c = np.copy(datasim2[:, i])
 
 # sim3 results
 fitres = '{}_WFIRST_{}3.fitres'.format(init, surv)
 with open(fitres, 'r') as f:
-    vars = f.readlines()[1]
+    for line in f:
+        if 'VARNAME' in line:
+            var = line
+            break
 with open(fitres, 'r') as f:
-    varscount = int(f.readlines()[0].split(' ')[1]) - 2
-vars = vars.split()
-vars.remove('VARNAMES:')
-vars.remove('FIELD')
+    for line in f:
+        if 'NVAR' in line:
+            varscount = int(line.split(' ')[1]) - 2
+            break
+var = var.split()
+var.remove('VARNAMES:')
+var.remove('FIELD')
 columns = tuple(list(range(1, 5)) + list(range(6, 40)))
 datasim3 = np.loadtxt(fitres, dtype=float, skiprows=12, usecols=columns)
 for i in range(varscount):
-    if vars[i] == 'HOST_LOGMASS':
+    if var[i] == 'HOST_LOGMASS':
         sim3mass = np.copy(datasim3[:, i])
-    elif vars[i] == 'x1':
+    elif var[i] == 'x1':
         sim3x1 = np.copy(datasim3[:, i])
-    elif vars[i] == 'c':
+    elif var[i] == 'c':
         sim3c = np.copy(datasim3[:, i])
 
 # Dragan data
 datafitres = 'dragan2.fitres'
 os.chdir(homedir + '/dragan')
 with open(datafitres, 'r') as f:
-    datavars = f.readlines()[1]
+    for line in f:
+        if 'VARNAME' in line:
+            datavars = line
+            break
 with open(datafitres, 'r') as f:
-    datavarscount = int(f.readlines()[0].split(' ')[1]) - 2
+    for line in f:
+        if 'NVAR' in line:
+            datavarscount = int(line.split(' ')[1]) - 3
+            break
 datavars = datavars.split()
 datavars.remove('VARNAMES:')
 datavars.remove('FIELD')
@@ -129,9 +160,15 @@ for i in range(datavarscount):
 
 errfitres = 'supercal_vH0.fitres'
 with open(errfitres, 'r') as f:
-    errvars = f.readlines()[1]
-with open(datafitres, 'r') as f:
-    errvarscount = int(f.readlines()[0].split(' ')[1]) - 2
+    for line in f:
+        if 'VARNAME' in line:
+            errvars = line
+            break
+with open(errfitres, 'r') as f:
+    for line in f:
+        if 'NVAR' in line:
+            errvarscount = int(line.split(' ')[1]) - 3
+            break
 errvars = errvars.split()
 errvars.remove('VARNAMES:')
 errvars.remove('FIELD')
@@ -152,7 +189,7 @@ for i in range(errvarscount):
     elif errvars[i] == 'HOST_LOGMASS':
         errhostmass = np.copy(errdata[:, i])
 
-os.chdir(homedir + '/fitres/{}'.format(surv.lower()))
+os.chdir(homedir + '/fitres/{}'.format(surv))
 
 # only use CIDint = 4 for SNLS
 bad_cidint = np.asarray([x == 4 for x in datacidint])
@@ -301,7 +338,7 @@ def weightmaker3D(arr2, arr3, bounds, datamap, simmap, wmap0=False, step1=1., st
         for j in range(d):  # j = color cell
             if np.sum(wmap[i, :, j]) != 0.:
                 massprobs = wmap[i, :, j] / np.sum(wmap[i, :, j])
-                wpinterp = interp.interp1d(range(w), massprobs, fill_value='extrapolate')
+                wpinterp = interp.interp1d(range(w), massprobs, fill_value=0.)
                 neww = np.linspace(0, w - 1, w * 10)
                 newmassprobs = wpinterp(neww)
                 newmassprobs[newmassprobs < 0.] = 0.
@@ -435,7 +472,7 @@ else:
     # raise error is iteration number is not valid.
     raise IterError('Must choose iteration number of 0, 1, 2, or 3.')
 # create HOSTLIB file
-os.chdir(homedir + '/hostlib/{}'.format(surv.lower()))
+os.chdir(homedir + '/hostlib/{}'.format(surv))
 hostlib = open('{}_{}_{}_{}.HOSTLIB'.format(init, hostlibsuffix,  surv, smeararg), mode='w')
 hostlib.write('NVAR: 7\n'
                 'VARNAMES: GALID ZTRUE c x1 LOGMASS_TRUE LOGMASS_OBS LOGMASS_ERR\n\n')

@@ -13,7 +13,7 @@ with open(datafitres, 'r') as f:
 with open(datafitres, 'r') as f:
     for line in f:
         if 'NVAR' in line:
-            datavarscount = int(line.split(' ')[1]) - 2
+            datavarscount = int(line.split(' ')[1]) - 3
             break
 datavars = datavars.split()
 datavars.remove('VARNAMES:')
@@ -96,7 +96,6 @@ with open(sdssfitres, 'r') as f:
 sdssvars = sdssvars.split()
 sdssvars.remove('VARNAMES:')
 sdssvars.remove('FIELD')
-
 sdssdata = np.loadtxt(sdssfitres, dtype=float, skiprows=12, usecols=columns)
 
 os.chdir(homedir + '/fitres/SNLS')

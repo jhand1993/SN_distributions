@@ -16,7 +16,7 @@ with open(datafitres, 'r') as f:
 with open(datafitres, 'r') as f:
     for line in f:
         if 'NVAR' in line:
-            datavarscount = int(line.split(' ')[1]) - 2
+            datavarscount = int(line.split(' ')[1]) - 3
             break
 datavars = datavars.split()
 datavars.remove('VARNAMES:')
@@ -83,7 +83,7 @@ for i in range(len(zcmb)):
 lowz /= len(zcmb)
 
 # import four sim fitres data
-columns = tuple(list(range(1, 4)) + list(range(5, 53)))
+columns = tuple(list(range(1, 4)) + list(range(5, 40)))
 os.chdir(homedir + '/SIMFIT_SDSS_{}/JSH_{}_G10_SDSS'.format(vers, vers))
 sdssfitres = 'FITOPT000.FITRES'
 with open(sdssfitres, 'r') as f:
@@ -103,7 +103,7 @@ sdssvars.remove('FIELD')
 sdssdata = np.loadtxt(sdssfitres, dtype=float, skiprows=12, usecols=columns)
 
 os.chdir(homedir + '/SIMFIT_SNLS_{}/JSH_{}_G10_SNLS'.format(vers, vers))
-sdssfitres = 'FITOPT000.FITRES'
+snlsfitres = 'FITOPT000.FITRES'
 with open(snlsfitres, 'r') as f:
     for line in f:
         if 'VARNAME' in line:
@@ -121,7 +121,7 @@ snlsdata = np.loadtxt(snlsfitres, dtype=float, skiprows=12, usecols=columns)
 
 """
 os.chdir(homedir + '/SIMFIT_PS1_{}/JSH_{}_G10_PS1'.format(vers, vers))
-sdssfitres = 'FITOPT000.FITRES'
+ps1fitres = 'FITOPT000.FITRES'
 with open(ps1fitres, 'r') as f:
     for line in f:
         if 'VARNAME' in line:
@@ -140,7 +140,7 @@ ps1data = np.loadtxt(ps1fitres, dtype=float, skiprows=12, usecols=columns)
 """
 
 os.chdir(homedir + '/SIMFIT_LOWZ_{}/JSH_{}_G10_LOWZ'.format(vers, vers))
-sdssfitres = 'FITOPT000.FITRES'
+lowzfitres = 'FITOPT000.FITRES'
 with open(lowzfitres, 'r') as f:
     for line in f:
         if 'VARNAME' in line:
@@ -165,7 +165,13 @@ snls /= csum
 lowz /= csum
 
 # create new composite fitres with entry numbers proportioned by CID counts in dragan2.
-os.chdir(homedir + '/fitres/{}_composite_nomures'.format(vers))
+try:
+    os.mkdir(homedir + '/fitres/{}_composite'.format(vers))
+except FileExistsError:
+    pass
+except:
+    raise
+os.chdir(homedir + '/fitres/{}_composite'.format(vers))
 newfitres = open('{}_composite_nomures.fitres'.format(vers), mode='w')
 newfitres.write('NVAR: ' + str(sdssvarscount) + '\n')
 newfitres.write('VARNAMES: ' + ' '.join(sdssvars))

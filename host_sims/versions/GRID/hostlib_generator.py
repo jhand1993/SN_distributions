@@ -420,7 +420,7 @@ x1asymgauss = asymgauss1d(x1p3)
 # independent variable samples drawn from respective distributions
 csample = sample_gen(casymgauss, 1000, -1, 1)
 x1sample = sample_gen(x1asymgauss, 1000, -4, 3)
-zsample = (max(datazcmb) + 0.19) * np.random.random(size=sample) + 0.01
+zsample = (max(datazcmb) + 0.2) * np.random.random(size=sample) + 0.009
 masssample = 6. * np.random.random(size=sample) + 7.
 masserrsample = errmaker(zsample, errhostmasserr, errzcmb)
 # map cell things for iterative weighting mass thingy

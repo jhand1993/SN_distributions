@@ -56,19 +56,19 @@ ids = ids[bad_mures]
 # count up IDSURVEY totals for IDSURVEY=1, 4, or 15
 sdss = 0
 snls = 0
-# ps1 = 0
+ps1 = 0
 for i in ids:
     if int(i) == 1:
         sdss += 1
     elif int(i) == 4:
         snls += 1
-    # elif int(i) == 15:
-    #     ps1 += 1
+    elif int(i) == 15:
+        ps1 += 1
 
 # normalize count values
 sdss /= len(ids)
 snls /= len(ids)
-# ps1 /= len(ids)
+ps1 /= len(ids)
 
 # count up zcmb < 0.1 for all IDSURVEY != 1,4,15
 lowz = 0
@@ -115,7 +115,6 @@ snlsvars.remove('VARNAMES:')
 snlsvars.remove('FIELD')
 snlsdata = np.loadtxt(snlsfitres, dtype=float, skiprows=12, usecols=columns)
 
-"""
 os.chdir(homedir + '/fitres/PS1')
 ps1fitres = 'JSH_WFIRST_PS14_mures.fitres'
 with open(ps1fitres, 'r') as f:
@@ -131,9 +130,7 @@ with open(ps1fitres, 'r') as f:
 ps1vars = ps1vars.split()
 ps1vars.remove('VARNAMES:')
 ps1vars.remove('FIELD')
-columns = tuple(list(range(1, 5)) + list(range(6, 56)))
 ps1data = np.loadtxt(ps1fitres, dtype=float, skiprows=12, usecols=columns)
-"""
 
 os.chdir(homedir + '/fitres/LOWZ')
 lowzfitres = 'JSH_WFIRST_LOWZ4_mures.fitres'
@@ -182,7 +179,6 @@ for i in range(len(snlsdata[:, 0])):
         count += 1
     else:
         break
-"""
 count = 0
 for i in range(len(ps1data[:, 0])):
     if count < int(ps1 * sample):
@@ -191,7 +187,6 @@ for i in range(len(ps1data[:, 0])):
         count += 1
     else:
         break
-"""
 count = 0
 for i in range(len(lowzdata[:, 0])):
     if count < int(lowz * sample):

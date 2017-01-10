@@ -2,7 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 import os
+from config import *
 
+os.chdir(homedir + '/dragan')
 columns = tuple(list(range(2, 5)) + list(range(6, 25)))
 snfit = np.loadtxt('dragan2.fitres', dtype=float, skiprows=14, usecols=columns)
 host_logmass = np.copy(snfit[:, 8])
@@ -12,11 +14,11 @@ c = np.copy(snfit[:, 17])
 cidint = np.copy(snfit[:, 1])
 
 # only use CIDint = 1
-bad_cidint = np.asarray([x == 1 for x in cidint])
-host_logmass = host_logmass[bad_cidint]
-zCMB = zCMB[bad_cidint]
-x1 = x1[bad_cidint]
-c = c[bad_cidint]
+# bad_cidint = np.asarray([x == 1 for x in cidint])
+# host_logmass = host_logmass[bad_cidint]
+# zCMB = zCMB[bad_cidint]
+# x1 = x1[bad_cidint]
+# c = c[bad_cidint]
 
 # remove host_logmass < 7 from data.
 bad_logmass = np.asarray([x >= 7. for x in host_logmass])
@@ -103,7 +105,7 @@ def avgbins2(arrx, arry, step, sem=False):
     else:
         return np.asarray(meanbins), bins_centered
 
-bins = np.arange(8.5, 12, 0.5)
+bins = np.arange(8., 12, 0.5)
 zbins = avgbins(host_logmass, zCMB, 8, 12, 0.5)
 x1bins = avgbins(host_logmass, x1, 8, 12, 0.5)
 cbins = avgbins(host_logmass, c, 8, 12, 0.5)
@@ -115,31 +117,39 @@ fig_size = plt.rcParams["figure.figsize"]
 fig_size[0] = 16.0
 fig_size[1] = 8.0
 
-os.chdir('/Users/jaredhand/WFIRST_research/SN_distributions/dragan/dragan_plots/cid1_v5')
-plt.xlabel('host_logmass')
+# os.chdir('/Users/jaredhand/WFIRST_research/SN_distributions/dragan/dragan_plots/cid1_v5')
+plt.xlabel(r'$M_H$', fontsize=32)
 plt.ylabel('zCMB')
 plt.xlim(7., 13.5)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
 plt.scatter(host_logmass, zCMB, c='blue', label='data', alpha=0.5)
-plt.scatter(bins, zbins, c='red', marker='D', s=50,  label='bins', alpha=0.9)
-plt.legend()
-plt.savefig('Dragan_zCMB_scatter.png')
+plt.scatter(bins, zbins, c='red', marker='D', s=100,  label='bins', alpha=0.9)
+plt.legend(fontsize=24)
+# plt.savefig('Dragan_zCMB_scatter.png')
 plt.show()
 
-plt.xlabel('host_logmass')
-plt.ylabel('x1')
+plt.xlabel(r'$M_H$', fontsize=32)
+plt.ylabel('x1', fontsize=32)
 plt.xlim(7., 13.5)
-plt.scatter(host_logmass, x1, c='blue', label='data', alpha=0.5)
-plt.scatter(bins, x1bins, c='red', marker='D', s=50, label='bins', alpha=0.9)
-plt.legend()
-plt.savefig('Dragan_x1_scatter.png')
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+plt.scatter(host_logmass, x1, c='blue', label='data', alpha=0.5, s=50)
+plt.scatter(bins, x1bins, c='red', marker='D', s=100, label='bins', alpha=0.9)
+plt.legend(fontsize=24)
+plt.title(r'$M_H$ vs Stretch', fontsize=32)
+# plt.savefig('Dragan_x1_scatter.png')
 plt.show()
 
-plt.xlabel('host_logmass')
-plt.ylabel('c')
+plt.xlabel(r'$M_H$', fontsize=32)
+plt.ylabel('c', fontsize=32)
 plt.xlim(7., 13.5)
-plt.scatter(host_logmass, c, c='blue', label='data', alpha=0.5)
-plt.scatter(bins, cbins, c='red', marker='D', s=50, label='bins', alpha=0.9)
-plt.legend()
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+plt.scatter(host_logmass, c, c='blue', label='data', alpha=0.5, s=50)
+plt.scatter(bins, cbins, c='red', marker='D', s=100, label='bins', alpha=0.9)
+plt.legend(fontsize=24)
+plt.title(r'$M_H$ vs Color', fontsize=32)
 plt.savefig('Dragan_c_scatter.png')
 plt.show()
 
@@ -158,4 +168,3 @@ plt.xlabel('x1')
 plt.legend()
 plt.savefig('x1_c.png')
 plt.show()
-

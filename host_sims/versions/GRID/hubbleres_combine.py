@@ -1,10 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
+# import matplotlib.rcParams as rcp
 import scipy.stats as stats
 import os
 import decimal
 from config import *
 
+# rcp.update({'font.size': 22})
 # import dragan data
 datafitres = 'dragan2.fitres'
 os.chdir(homedir + '/dragan')
@@ -85,17 +87,20 @@ with open(fitres, 'r') as f:
 with open(fitres, 'r') as f:
     for line in f:
         if 'NVAR' in line:
-            varscount = int(line.split(' ')[1]) - 2
+            varscount = int(line.split(' ')[1])
             break
 var = var.split()
 var.remove('VARNAMES:')
 # vars.remove('FIELD')
-columns = tuple(list(range(1, 52)))
-data = np.loadtxt(fitres, dtype=float, skiprows=2, usecols=columns)
+columns = tuple(list(range(1, 50)))
+data = np.loadtxt(fitres, dtype=float, skiprows=19, usecols=columns)
+print(len(data[0,:]))
 for i in range(varscount):
     if var[i] == 'MURES':
+        print(i)
         mures = np.copy(data[:, i])
     elif var[i] == 'HOST_LOGMASS':
+        print(i)
         hostmass = np.copy(data[:, i])
     elif var[i] == 'zCMB':
         zcmb = np.copy(data[:, i])
@@ -105,11 +110,11 @@ for i in range(varscount):
         c = np.copy(data[:, i])
     elif var[i] == 'FITPROB':
         fitprob = np.copy(data[:, i])
-
+print(var)
+print(len(var), varscount)
 # print(max(mures), min(mures))
 # print(max(c), min(c))
 # print(max(x1), min(x1))
-
 bad_c = np.asarray([x < 0.3 for x in np.abs(c)])
 c = c[bad_c]
 x1 = x1[bad_c]
@@ -363,9 +368,9 @@ datamuresbel = np.asarray(datamures[databelowten])
 massx1bounds = [7., 13., -4., 3.]
 masscbounds = [7., 13., -0.3, 0.3]
 x1massmap = digitize(hostmass, x1, massx1bounds)
-cmassmap = digitize(hostmass, c, masscbounds, step1=0.5, step2=0.05)
+cmassmap = digitize(hostmass, c, masscbounds, step1=1., step2=0.1)
 datax1massmap = digitize(datahostmass, datax1, massx1bounds)
-datacmassmap = digitize(datahostmass, datac, masscbounds, step1=0.5, step2=0.05)
+datacmassmap = digitize(datahostmass, datac, masscbounds, step1=1., step2=0.1)
 
 # zbin size
 z = 0.1
@@ -901,61 +906,67 @@ plt.savefig('z_x14.png')
 plt.show()
 
 # random plots
-plt.scatter(hostmass, c, alpha=0.5)
-plt.scatter(datahostmass, datac, alpha=0.6, marker='v', color='red')
-plt.xlabel('hostmass')
-plt.ylabel('c')
+# plt.scatter(hostmass, c, alpha=0.5)
+plt.scatter(datahostmass, datac, alpha=0.6, marker='o', s=25)
+plt.xlabel(r'$M_H$', fontsize=20)
+plt.ylabel('c', fontsize=20)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.title('Host Mass vs Color', fontsize=20)
 plt.show()
 
-plt.scatter(hostmass, x1, alpha=0.5)
-plt.scatter(datahostmass, datax1, alpha=0.6, marker='v', color='red')
-plt.xlabel('hostmass')
-plt.ylabel('x1')
+# plt.scatter(hostmass, x1, alpha=0.5)
+plt.scatter(datahostmass, datax1, alpha=0.6, marker='o', s=25)
+plt.xlabel(r'$M_H$', fontsize=20)
+plt.ylabel('x1', fontsize=20)
+plt.xticks(fontsize=16)
+plt.yticks(fontsize=16)
+plt.title('Host Mass vs Stretch', fontsize=20)
 plt.show()
 
 # heat map params
 x1bounds = [7., 13., -4., 3.]
 cbounds = [7., 13., -0.3, 0.3]
 massrange = np.arange(x1bounds[0], x1bounds[1], 1.)
-cmassrange = np.arange(x1bounds[0], x1bounds[1], 0.5)
+cmassrange = np.arange(x1bounds[0], x1bounds[1], 1.)
 x1range = np.arange(x1bounds[2], x1bounds[3], 1.)
-crange = np.arange(cbounds[2], cbounds[3], 0.05)
+crange = np.arange(cbounds[2], cbounds[3], 0.1)
 crange[np.abs(crange) < 1e-10] = 0.
 
 # heat maps
 plt.title('color')
 plt.subplot(121)
 plt.pcolormesh(cmassmap)
-plt.xticks(np.arange(len(cmassrange)), cmassrange)
-plt.yticks(np.arange(len(crange)), crange)
-plt.title('simulation')
-plt.xlabel('host mass')
-plt.ylabel('c')
+plt.xticks(np.arange(len(cmassrange)), cmassrange, fontsize=20)
+plt.yticks(np.arange(len(crange)), crange, fontsize=20)
+plt.title('Simulation', fontsize=36)
+plt.xlabel(r'$M_H$', fontsize=32)
+plt.ylabel('c', fontsize=32)
 plt.colorbar()
 plt.subplot(122)
 plt.pcolormesh(datacmassmap)
-plt.xticks(np.arange(len(cmassrange)), cmassrange)
-plt.yticks(np.arange(len(crange)), crange)
-plt.title('data')
-plt.xlabel('host mass')
+plt.xticks(np.arange(len(cmassrange)), cmassrange, fontsize=20)
+plt.yticks(np.arange(len(crange)), crange, fontsize=20)
+plt.title('Data', fontsize=36)
+plt.xlabel(r'$M_H$', fontsize=32)
 plt.colorbar()
 plt.savefig('cheatmaps.png')
 plt.show()
 
 plt.subplot(121)
 plt.pcolormesh(x1massmap)
-plt.xticks(np.arange(len(massrange)), massrange)
-plt.yticks(np.arange(len(x1range)), x1range)
-plt.title('simulation')
-plt.xlabel('host mass')
-plt.ylabel('x1')
+plt.xticks(np.arange(len(massrange)), massrange, fontsize=20)
+plt.yticks(np.arange(len(x1range)), x1range, fontsize=20)
+plt.title('Simulation', fontsize=36)
+plt.xlabel(r'$M_H$', fontsize=32)
+plt.ylabel('x1', fontsize=32)
 plt.colorbar()
 plt.subplot(122)
 plt.pcolormesh(datax1massmap)
-plt.xticks(np.arange(len(massrange)), massrange)
-plt.yticks(np.arange(len(x1range)), x1range)
-plt.title('data')
-plt.xlabel('host mass')
+plt.xticks(np.arange(len(massrange)), massrange, fontsize=20)
+plt.yticks(np.arange(len(x1range)), x1range, fontsize=20)
+plt.title('Data', fontsize=32)
+plt.xlabel(r'$M_H$', fontsize=32)
 plt.colorbar()
 plt.savefig('x1heatmaps.png')
 plt.show()

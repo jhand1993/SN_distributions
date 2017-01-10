@@ -119,23 +119,32 @@ plt.legend()
 plt.show()
 
 # plt.hist(simhost_logmass, 100, normed=True, alpha=0.4, label='after')
-plt.hist(host_logmass, 40, normed=True, alpha=0.4)
-plt.xlabel('host mass')
-plt.xlim(7, 13.5)
+#plt.hist(host_logmass, 40, normed=True, alpha=0.4)
+#plt.xlabel('host mass')
+#plt.xlim(7, 13.5)
+#plt.show()
+
+fig_size = plt.rcParams['figure.figsize']
+fig_size[0] = 16.0
+fig_size[1] = 8.0
+
+plt.hist(c, 20, normed=True, alpha=0.8, label='sim')
+#plt.hist(data_c, 20, color='red', normed=True, alpha=0.4, label='obs')
+plt.xlabel('c', fontsize=32)
+plt.title('Color Histogram', fontsize=36)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
 plt.show()
 
-plt.hist(c, 20, normed=True, alpha=0.4, label='sim')
-plt.hist(data_c, 20, color='red', normed=True, alpha=0.4, label='obs')
-plt.xlabel('c')
-plt.legend()
+plt.hist(x1, 20, normed=True, alpha=0.8)
+plt.xlabel('x1', fontsize=32)
+plt.title('Stretch Histogram', fontsize=36)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
 plt.show()
 
-# plt.hist(x1, 100, normed=True, alpha=0.4)
-# plt.xlabel('x1')
-# plt.show()
-
-# plt.hist(simx1, 100, normed=True, alpha=0.3, label='after')
-# plt.hist(x1, 100, normed=True, alpha=0.3, label='before')
+plt.hist(simx1, 100, normed=True, alpha=0.3, label='after')
+plt.hist(x1, 100, normed=True, alpha=0.3, label='before')
 # plt.xlabel('x1')
 # plt.legend()
 # plt.show()

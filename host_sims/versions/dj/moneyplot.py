@@ -74,7 +74,6 @@ for i in range(varscount):
 
 thein = -0.01 * np.arange(0,18,2)
 theout = np.array([-0.0057, -0.0323, -0.046, -0.0648, -0.0863, -0.1028, -0.1198, -0.1407, -0.1544])
-theoutS2mu = np.array([-0.0129, -0.033, -0.0472, -0.0665, -0.0854, -0.0986, -0.1205, -0.1474, -0.1683])
 thein100 = [0, -0.08]
 theout100 = [-0.007, -0.068]
 # thecout = [0.013, 0.010, 0.014, 0.013, 0.0066]
@@ -86,8 +85,6 @@ offdec = d.Decimal((-0.08 - theb) / them) + d.Decimal(0)
 print('slope:', them, '  y-intercept:', theb)
 print('True offset value:', trueoffset)
 
-themS2mu, thebS2mu = np.polyfit(thein, theoutS2mu, 1)
-
 del0 = np.abs(np.subtract(sim0mu, sim0mumodel))
 del8 = np.abs(np.subtract(sim8mu, sim8mumodel))
 
@@ -95,31 +92,29 @@ fig_size = plt.rcParams['figure.figsize']
 fig_size[0] = 16.0
 fig_size[1] = 8.0
 
-# plt.scatter(sim0z, del0, color='blue', label='Step=0.0', alpha=0.5, marker='x')
-# plt.scatter(sim8z, del8, color='red', label='Step=0.08', alpha=0.5)
-# plt.legend(loc=2, fontsize=24)
-# plt.xlabel('z', fontsize=28)
-# plt.ylabel('mu - mumodel', fontsize=28)
-# plt.show()
+plt.scatter(sim0z, del0, color='blue', label='Step=0.0', alpha=0.5, marker='x')
+plt.scatter(sim8z, del8, color='red', label='Step=0.08', alpha=0.5)
+plt.legend(loc=2, fontsize=24)
+plt.xlabel('z', fontsize=28)
+plt.ylabel('mu - mumodel', fontsize=28)
+plt.show()
 
-plt.plot(np.linspace(-0.2, 0.05, 5), np.linspace(-0.2, 0.05, 5) * them + theb, '--', color='blue', label='Best Fit')
-plt.plot(np.linspace(-0.2, 0.05, 5), np.linspace(-0.2, 0.05, 5) * themS2mu + thebS2mu, '--', color='red', label='Best Fit SALT2')
-plt.plot(np.linspace(-0.2, 0.05, 5), np.linspace(-0.2, 0.05, 5), '-', color='green', label='x=y', alpha=0.5)
-plt.scatter(thein, theout, color='blue', s=150, marker='D', alpha=0.5)
-plt.scatter(thein, theoutS2mu, color='red', s=150, marker='D', alpha=0.5)
+plt.plot(np.linspace(-0.2, 0.05, 5), np.linspace(-0.2, 0.05, 5) * them + theb, '--', color='black', label='Best Fit')
+plt.plot(np.linspace(-0.2, 0.05, 5), np.linspace(-0.2, 0.05, 5), '-', color='red', label='x=y', alpha=0.4)
+plt.scatter(thein, theout, color='blue', s=150, marker='D', alpha=0.5, label='SNANA')
 # plt.scatter(thein100, theout100, color='red', s=60, marker='D', alpha=0.8, label='Sim size=1E5')
 # plt.scatter(trueoffset, trueoffset * them + theb, color='green', marker='v', s=200, alpha=0.6, label='8% output')
 # plt.annotate(str(offdec), xy=(trueoffset, trueoffset * them + theb),
 #              arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=0", alpha=0.9),
 #              xycoords='data', xytext=(trueoffset, trueoffset * them + theb + 0.05), fontsize=24)
-plt.xlabel('Intrinsic Mass Step', fontsize=20)
-plt.ylabel('Output Mass Step', fontsize=20)
+plt.xlabel('Intrinsic Mass Step', fontsize=32)
+plt.ylabel('Output Mass Step', fontsize=32)
 plt.xlim(-0.18, 0.02)
 plt.ylim(-0.18, 0.02)
-plt.xticks(fontsize=16)
-plt.yticks(fontsize=16)
-plt.legend(loc=2, fontsize=24)
-plt.title('Output Mass Step vs Intrinsic Mass Step', fontsize=24)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+plt.legend(loc=2, fontsize=28)
+plt.title('Output Mass Step vs Intrinsic Mass Step', fontsize=36)
 plt.show()
 
 """

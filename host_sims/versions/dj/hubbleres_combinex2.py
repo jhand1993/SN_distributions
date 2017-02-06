@@ -75,8 +75,8 @@ datacidint = datacidint[bad_mures]
 newdragan = newdragan[bad_mures]
 
 # import sim1 data
-fitres0 = '1KMS0_composite_mures.fitres'
-os.chdir(homedir + 'fitres/1KMS0_composite')
+fitres0 = '100KMS0_composite.fitres'
+os.chdir(homedir + '/fitres/100KMS0_composite')
 with open(fitres0, 'r') as f:
     for line in f:
         if 'VARNAME' in line:
@@ -144,8 +144,8 @@ hostmass0 = hostmass0[bad_fitprob0]
 fitprob0 = fitprob0[bad_fitprob0]
 
 # import sim2 data
-fitres8 = '1KMS8_composite_mures.fitres'
-os.chdir(homedir + '/fitres/1KMS8_composite')
+fitres8 = '100KMS8_composite.fitres'
+os.chdir(homedir + '/fitres/100KMS8_composite')
 with open(fitres8, 'r') as f:
     for line in f:
         if 'VARNAME' in line:
@@ -674,7 +674,7 @@ decimal.getcontext().prec = 2
 os.chdir(homedir + '/mures_plots/composite')
 
 # y-axis bounds for plots
-myb = [-0.1, 0.1]
+myb = [-0.05, 0.05]
 cyb = [-0.2, 0.2]
 x1yb = [-1.5, 1.5]
 
@@ -686,13 +686,13 @@ plt.errorbar(zbins8 - 0.005, muresbins8, yerr=muresbinserr8, markersize=12,
 # plt.scatter(zcmb8, mures8, alpha=0.4, color='b', label='MS8', marker='x')
 plt.plot([0,1], [0,0], '-', color='black')
 plt.xlim(0., 1.)
-plt.xticks(zaxis, zaxis, fontsize=16)
-plt.yticks(fontsize=16)
+plt.xticks(zaxis, zaxis, fontsize=20)
+plt.yticks(fontsize=20)
 plt.ylim(myb[0], myb[1])
-plt.xlabel('Redshift', fontsize=20)
-plt.ylabel('Hubble residuals (mag)', fontsize=20)
-plt.title('Does Distance Bias Depend on Mass Step?', fontsize=24)
-plt.legend(loc=2, fontsize=20)
+plt.xlabel('Redshift', fontsize=32)
+plt.ylabel('Hubble residuals (mag)', fontsize=32)
+plt.title('Does Distance Bias Depend on Mass Step?', fontsize=36)
+plt.legend(loc=1, fontsize=24)
 plt.show()
 
 # plt.errorbar(zabvbins0 + 0.005, muresabvbins0, yerr=muresabvbinserr0, markersize=12,
@@ -705,12 +705,12 @@ plt.errorbar(zbelbins8 - 0.005, muresbelbins8, yerr=muresbelbinserr8, markersize
              color='blue', marker='s', alpha=0.7, label=r'$M_H < 10$, Mass step = 8%', fmt='o')
 plt.plot([0,1], [0,0], '-', color='black')
 plt.xlim(0., 1.)
-plt.xticks(zaxis, zaxis, fontsize=16)
-plt.yticks(fontsize=16)
+plt.xticks(zaxis, zaxis, fontsize=20)
+plt.yticks(fontsize=20)
 plt.ylim(myb[0], myb[1])
-plt.xlabel('Redshift', fontsize=20)
-plt.ylabel('Hubble residuals (mag)', fontsize=20)
-plt.title('How does Mass Step change with Redshift?', fontsize=24)
-plt.legend(loc=1, fontsize=20)
+plt.xlabel('Redshift', fontsize=30)
+plt.ylabel('Hubble residuals (mag)', fontsize=32)
+plt.title('How does Mass Step change with Redshift?', fontsize=36)
+plt.legend(loc=1, fontsize=24)
 # plt.savefig('z_mures3.png')
 plt.show()

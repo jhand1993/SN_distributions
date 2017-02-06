@@ -5,7 +5,6 @@ from config import *
 
 # suffix version
 vers = sys.argv[1]
-dirs = sys.argv[2]
 # Dragan data
 datafitres = 'dragan2.fitres'
 os.chdir(homedir + '/dragan')
@@ -85,7 +84,7 @@ lowz /= len(zcmb)
 
 # import four sim fitres data
 columns = tuple(list(range(1, 4)) + list(range(5, 40)))
-os.chdir(homedir + '/SIMFIT_SDSS_{}/JSH_{}_SDSS'.format(dirs, vers))
+os.chdir(homedir + '/SIMFIT_SDSS_{}/JSH_{}_G10_SDSS'.format(vers, vers))
 sdssfitres = 'FITOPT000.FITRES'
 with open(sdssfitres, 'r') as f:
     for line in f:
@@ -103,7 +102,7 @@ sdssvars.remove('FIELD')
 
 sdssdata = np.loadtxt(sdssfitres, dtype=float, skiprows=12, usecols=columns)
 
-os.chdir(homedir + '/SIMFIT_SNLS_{}/JSH_{}_SNLS'.format(dirs, vers))
+os.chdir(homedir + '/SIMFIT_SNLS_{}/JSH_{}_G10_SNLS'.format(vers, vers))
 snlsfitres = 'FITOPT000.FITRES'
 with open(snlsfitres, 'r') as f:
     for line in f:
@@ -120,7 +119,7 @@ snlsvars.remove('VARNAMES:')
 snlsvars.remove('FIELD')
 snlsdata = np.loadtxt(snlsfitres, dtype=float, skiprows=12, usecols=columns)
 
-os.chdir(homedir + '/SIMFIT_PS1_{}/JSH_{}_PS1'.format(dirs, vers))
+os.chdir(homedir + '/SIMFIT_PS1_{}/JSH_{}_G10_PS1'.format(vers, vers))
 ps1fitres = 'FITOPT000.FITRES'
 with open(ps1fitres, 'r') as f:
     for line in f:
@@ -137,7 +136,7 @@ ps1vars.remove('VARNAMES:')
 ps1vars.remove('FIELD')
 ps1data = np.loadtxt(ps1fitres, dtype=float, skiprows=12, usecols=columns)
 
-os.chdir(homedir + '/SIMFIT_LOWZ_{}/JSH_{}_LOWZ'.format(dirs, vers))
+os.chdir(homedir + '/SIMFIT_LOWZ_{}/JSH_{}_G10_LOWZ'.format(vers, vers))
 lowzfitres = 'FITOPT000.FITRES'
 with open(lowzfitres, 'r') as f:
     for line in f:
@@ -169,7 +168,7 @@ except FileExistsError:
     pass
 except:
     raise
-os.chdir(homedir + '/fitres/{}_composite'.format(vers)) # confusing, but necessary to use dirs here in formatting.
+os.chdir(homedir + '/fitres/{}_composite'.format(vers))
 newfitres = open('{}_composite_nomures.fitres'.format(vers), mode='w')
 newfitres.write('NVAR: ' + str(sdssvarscount) + '\n')
 newfitres.write('VARNAMES: ' + ' '.join(sdssvars))

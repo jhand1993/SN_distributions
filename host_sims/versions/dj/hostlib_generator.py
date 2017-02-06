@@ -2,6 +2,7 @@ import numpy as np
 import os
 import scipy.interpolate as interp
 import sys
+import matplotlib.pyplot as plt
 from config import *
 
 # set random seed:
@@ -55,7 +56,7 @@ ciddict = dict(zip(oksurvs, cidlist))
 os.chdir(homedir + '/fitres/{}'.format(surv))
 
 # sim1 results
-columns = tuple(list(range(1, 4)) + list(range(5, 39)))
+columns = tuple(list(range(1, 5)) + list(range(6, 39)))
 fitres = '{}_WFIRST_{}1.fitres'.format(init, surv)
 with open(fitres, 'r') as f:
     for line in f:
@@ -80,7 +81,7 @@ try:
         elif var[i] == 'c':
             sim1c = np.copy(datasim1[:, i])
 except ValueError:
-    print('Warning: Fitres iteration 1 not imported')
+    print('Warning: Fitres iteration 1 not imported.  Directory given: ' + os.getcwd + '.  File given: ' + fitres + '.')
     pass
 except:
     raise
@@ -110,7 +111,7 @@ try:
         elif var[i] == 'c':
             sim2c = np.copy(datasim2[:, i])
 except ValueError:
-    print('Warning: Fitres iteration 2 not imported')
+    print('Warning: Fitres iteration 2 not imported.  Directory given: ' + os.getcwd + '.  File given: ' + fitres + '.')
     pass
 except:
     raise
@@ -140,10 +141,46 @@ try:
         elif var[i] == 'c':
             sim3c = np.copy(datasim3[:, i])
 except ValueError:
-    print('Warning: Fitres iteration 3 not imported')
+    print('Warning: Fitres iteration 3 not imported.  Directory given: ' + os.getcwd + '.  File given: ' + fitres + '.')
     pass
 except:
     raise
+
+# PS1 phot data
+magfitres = 'ps1phot_magmass.txt'
+os.chdir(homedir + '/dragan')
+with open(magfitres, 'r') as f:
+    for line in f:
+        if 'GID' in line:
+            magvars = line.split()
+            break
+magvarscount = len(magvars)
+magdata = np.loadtxt(magfitres, dtype=float, skiprows=1)
+for i in range(magvarscount):
+    if magvars[i] == 'GID':
+        maggid = np.copy(magdata[:, i])
+    elif magvars[i] == 'ZTRUE':
+        magzcmb = np.copy(magdata[:, i])
+    elif magvars[i] == 'LOGMASS':
+        maghostmass = np.copy(magdata[:, i])
+    elif magvars[i] == 'LOGMASS_ERR':
+        maghostmasserr = np.copy(magdata[:, i])
+    elif magvars[i] == 'g_obs':
+        maggobs = np.copy(magdata[:, i])
+    elif magvars[i] == 'r_obs':
+        magrobs = np.copy(magdata[:, i])
+    elif magvars[i] == 'i_obs':
+        magiobs = np.copy(magdata[:, i])
+    elif magvars[i] == 'z_obs':
+        magzobs = np.copy(magdata[:, i])
+    elif magvars[i] == 'g_abs':
+        maggabs = np.copy(magdata[:, i])
+    elif magvars[i] == 'r_abs':
+        magrabs = np.copy(magdata[:, i])
+    elif magvars[i] == 'i_abs':
+        magiabs = np.copy(magdata[:, i])
+    elif magvars[i] == 'z_abs':
+        magzabs = np.copy(magdata[:, i])
 
 # Dragan data
 datafitres = 'dragan2.fitres'
@@ -449,6 +486,38 @@ def errmaker(zarr, errdata, zdata):
         errsample.append(errval)
     return np.asarray(errsample)
 
+
+def magmaker(massarr, datamass, datamag, interval=0.5):
+    # line needs to be 'g', 'r', 'i', 'z'
+    # bin mag data with respect to mass data:
+    # print(datamass, datamag)
+    magarr = np.zeros_like(massarr)
+    # dmassmax = np.floor(max(datamass))
+    # dmassmin = np.ceil(min(datamass))
+    massbins = np.arange(np.ceil(min(datamass)) - 1, np.floor(max(datamass)) + 2., interval)
+    magmeanbins = np.zeros_like(massbins)
+    magsigbins = np.copy(magmeanbins)
+    for i in range(len(massbins)):
+        mags = []
+        for j in range(len(datamass)):
+            if massbins[i] <= datamass[j] < massbins[i] + interval:
+                mags.append(datamag[j])
+        magmeanbins[i] = np.mean(mags)
+        magsigbins[i] = np.std(mags)
+    # print(len(massbins), massbins)
+    # print(len(magmeanbins), magmeanbins)
+    meanfunc = interp.interp1d(massbins, magmeanbins)#, fill_value=np.mean(magmeanbins))
+    sigfunc = interp.interp1d(massbins, magsigbins)#, fill_value=np.mean(magsigbins))
+    for i in range(len(massarr)):
+        # print(massarr[i])
+        mu = meanfunc(massarr[i])
+        sigma = sigfunc(massarr[i])
+        mag = np.random.normal(loc=mu, scale=sigma)
+        magarr[i] = mag
+    # print(magarr)
+    return magarr
+
+
 # asym gauss dists for mass, c and x1, respectively
 casymgauss = asymgauss1d(cp3)
 x1asymgauss = asymgauss1d(x1p3)
@@ -507,6 +576,22 @@ elif argv2 == 3:
 else:
     # raise error is iteration number is not valid.
     raise IterError('Must choose iteration number of 0, 1, 2, or 3.')
+
+# generate mag samples:
+print(maggobs)
+gobssamp = magmaker(masssamplefinal, maghostmass, maggobs)
+robssamp = magmaker(masssamplefinal, maghostmass, magrobs)
+iobssamp = magmaker(masssamplefinal, maghostmass, magiobs)
+zobssamp = magmaker(masssamplefinal, maghostmass, magzobs)
+gabssamp = magmaker(masssamplefinal, maghostmass, maggabs)
+rabssamp = magmaker(masssamplefinal, maghostmass, magrabs)
+iabssamp = magmaker(masssamplefinal, maghostmass, magiabs)
+zabssamp = magmaker(masssamplefinal, maghostmass, magrabs)
+
+plt.scatter(maghostmass, magrobs, marker='x', alpha=0.9, c='red')
+plt.scatter(masssamplefinal, robssamp, alpha=0.9)
+plt.show()
+
 # create HOSTLIB file
 os.chdir(homedir + '/hostlib/{}'.format(surv))
 hostlib = open('{}_{}_{}_{}.HOSTLIB'.format(init, hostlibsuffix,  surv, smeararg), mode='w')

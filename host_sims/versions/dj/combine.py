@@ -1,11 +1,7 @@
 import numpy as np
 import os
-import sys
 from config import *
 
-# suffix version
-vers = sys.argv[1]
-dirs = sys.argv[2]
 # Dragan data
 datafitres = 'dragan2.fitres'
 os.chdir(homedir + '/dragan')
@@ -84,9 +80,9 @@ for i in range(len(zcmb)):
 lowz /= len(zcmb)
 
 # import four sim fitres data
-columns = tuple(list(range(1, 4)) + list(range(5, 40)))
-os.chdir(homedir + '/SIMFIT_SDSS_{}/JSH_{}_SDSS'.format(dirs, vers))
-sdssfitres = 'FITOPT000.FITRES'
+columns = tuple(list(range(1, 4)) + list(range(5, 53)))
+os.chdir(homedir + '/fitres/SDSS')
+sdssfitres = 'JSH_WFIRST_SDSS4_mures.fitres'
 with open(sdssfitres, 'r') as f:
     for line in f:
         if 'VARNAME' in line:
@@ -100,11 +96,10 @@ with open(sdssfitres, 'r') as f:
 sdssvars = sdssvars.split()
 sdssvars.remove('VARNAMES:')
 sdssvars.remove('FIELD')
-
 sdssdata = np.loadtxt(sdssfitres, dtype=float, skiprows=12, usecols=columns)
 
-os.chdir(homedir + '/SIMFIT_SNLS_{}/JSH_{}_SNLS'.format(dirs, vers))
-snlsfitres = 'FITOPT000.FITRES'
+os.chdir(homedir + '/fitres/SNLS')
+snlsfitres = 'JSH_WFIRST_SNLS4_mures.fitres'
 with open(snlsfitres, 'r') as f:
     for line in f:
         if 'VARNAME' in line:
@@ -120,8 +115,8 @@ snlsvars.remove('VARNAMES:')
 snlsvars.remove('FIELD')
 snlsdata = np.loadtxt(snlsfitres, dtype=float, skiprows=12, usecols=columns)
 
-os.chdir(homedir + '/SIMFIT_PS1_{}/JSH_{}_PS1'.format(dirs, vers))
-ps1fitres = 'FITOPT000.FITRES'
+os.chdir(homedir + '/fitres/PS1')
+ps1fitres = 'JSH_WFIRST_PS14_mures.fitres'
 with open(ps1fitres, 'r') as f:
     for line in f:
         if 'VARNAME' in line:
@@ -137,8 +132,8 @@ ps1vars.remove('VARNAMES:')
 ps1vars.remove('FIELD')
 ps1data = np.loadtxt(ps1fitres, dtype=float, skiprows=12, usecols=columns)
 
-os.chdir(homedir + '/SIMFIT_LOWZ_{}/JSH_{}_LOWZ'.format(dirs, vers))
-lowzfitres = 'FITOPT000.FITRES'
+os.chdir(homedir + '/fitres/LOWZ')
+lowzfitres = 'JSH_WFIRST_LOWZ4_mures.fitres'
 with open(lowzfitres, 'r') as f:
     for line in f:
         if 'VARNAME' in line:
@@ -159,18 +154,12 @@ lowzdata = np.loadtxt(lowzfitres, dtype=float, skiprows=12, usecols=columns)
 csum = sdss + snls + lowz
 sdss /= csum
 snls /= csum
-ps1 /= csum
+# ps1 /= csum
 lowz /= csum
 
 # create new composite fitres with entry numbers proportioned by CID counts in dragan2.
-try:
-    os.mkdir(homedir + '/fitres/{}_composite'.format(vers))
-except FileExistsError:
-    pass
-except:
-    raise
-os.chdir(homedir + '/fitres/{}_composite'.format(vers)) # confusing, but necessary to use dirs here in formatting.
-newfitres = open('{}_composite_nomures.fitres'.format(vers), mode='w')
+os.chdir(homedir + '/fitres/composite')
+newfitres = open('composite.fitres', mode='w')
 newfitres.write('NVAR: ' + str(sdssvarscount) + '\n')
 newfitres.write('VARNAMES: ' + ' '.join(sdssvars))
 newfitres.write('\n')

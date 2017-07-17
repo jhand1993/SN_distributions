@@ -57,21 +57,21 @@ os.chdir(homedir + '/fitres/{}'.format(surv))
 
 # sim1 results
 columns = tuple(list(range(1, 5)) + list(range(6, 39)))
-fitres = '{}_DJ_{}1.fitres'.format(init, surv)
+fitres = '{}_WFIRST_{}1.fitres'.format(init, surv)
+with open(fitres, 'r') as f:
+    for line in f:
+        if 'VARNAME' in line:
+            var = line
+            break
+with open(fitres, 'r') as f:
+    for line in f:
+        if 'NVAR' in line:
+            varscount = int(line.split(' ')[1]) - 2
+            break
+var = var.split()
+var.remove('VARNAMES:')
+var.remove('FIELD')
 try:
-    with open(fitres, 'r') as f:
-        for line in f:
-            if 'VARNAME' in line:
-                var = line
-                break
-    with open(fitres, 'r') as f:
-        for line in f:
-            if 'NVAR' in line:
-                varscount = int(line.split(' ')[1]) - 2
-                break
-    var = var.split()
-    var.remove('VARNAMES:')
-    var.remove('FIELD')
     datasim1 = np.loadtxt(fitres, dtype=float, skiprows=12, usecols=columns)
     for i in range(varscount):
         if var[i] == 'HOST_LOGMASS':
@@ -81,32 +81,27 @@ try:
         elif var[i] == 'c':
             sim1c = np.copy(datasim1[:, i])
 except ValueError:
-    print('ValueError raised.')
-    print('Warning: Fitres iteration 1 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
-    pass
-except FileNotFoundError:
-    print('FileNotFoundError raised.')
-    print('Warning: Fitres iteration 1 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
+    print('Warning: Fitres iteration 1 not imported.  Directory given: ' + os.getcwd + '.  File given: ' + fitres + '.')
     pass
 except:
     raise
 
 # sim2 results
-fitres = '{}_DJ_{}2.fitres'.format(init, surv)
+fitres = '{}_WFIRST_{}2.fitres'.format(init, surv)
+with open(fitres, 'r') as f:
+    for line in f:
+        if 'VARNAME' in line:
+            var = line
+            break
+with open(fitres, 'r') as f:
+    for line in f:
+        if 'NVAR' in line:
+            varscount = int(line.split(' ')[1]) - 2
+            break
+var = var.split()
+var.remove('VARNAMES:')
+var.remove('FIELD')
 try:
-    with open(fitres, 'r') as f:
-        for line in f:
-            if 'VARNAME' in line:
-                var = line
-                break
-    with open(fitres, 'r') as f:
-        for line in f:
-            if 'NVAR' in line:
-                varscount = int(line.split(' ')[1]) - 2
-                break
-    var = var.split()
-    var.remove('VARNAMES:')
-    var.remove('FIELD')
     datasim2 = np.loadtxt(fitres, dtype=float, skiprows=12, usecols=columns)
     for i in range(varscount):
         if var[i] == 'HOST_LOGMASS':
@@ -116,32 +111,27 @@ try:
         elif var[i] == 'c':
             sim2c = np.copy(datasim2[:, i])
 except ValueError:
-    print('ValueError raised.')
-    print('Warning: Fitres iteration 2 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
-    pass
-except FileNotFoundError:
-    print('FileNotFoundError raised.')
-    print('Warning: Fitres iteration 2 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
+    print('Warning: Fitres iteration 2 not imported.  Directory given: ' + os.getcwd + '.  File given: ' + fitres + '.')
     pass
 except:
     raise
 
 # sim3 results
-fitres = '{}_DJ_{}3.fitres'.format(init, surv)
+fitres = '{}_WFIRST_{}3.fitres'.format(init, surv)
+with open(fitres, 'r') as f:
+    for line in f:
+        if 'VARNAME' in line:
+            var = line
+            break
+with open(fitres, 'r') as f:
+    for line in f:
+        if 'NVAR' in line:
+            varscount = int(line.split(' ')[1]) - 2
+            break
+var = var.split()
+var.remove('VARNAMES:')
+var.remove('FIELD')
 try:
-    with open(fitres, 'r') as f:
-        for line in f:
-            if 'VARNAME' in line:
-                var = line
-                break
-    with open(fitres, 'r') as f:
-        for line in f:
-            if 'NVAR' in line:
-                varscount = int(line.split(' ')[1]) - 2
-                break
-    var = var.split()
-    var.remove('VARNAMES:')
-    var.remove('FIELD')
     datasim3 = np.loadtxt(fitres, dtype=float, skiprows=12, usecols=columns)
     for i in range(varscount):
         if var[i] == 'HOST_LOGMASS':
@@ -151,12 +141,7 @@ try:
         elif var[i] == 'c':
             sim3c = np.copy(datasim3[:, i])
 except ValueError:
-    print('ValueError raised.')
-    print('Warning: Fitres iteration 3 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
-    pass
-except FileNotFoundError:
-    print('FileNotFoundError raised.')
-    print('Warning: Fitres iteration 3 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
+    print('Warning: Fitres iteration 3 not imported.  Directory given: ' + os.getcwd + '.  File given: ' + fitres + '.')
     pass
 except:
     raise
@@ -198,7 +183,7 @@ for i in range(magvarscount):
         magzabs = np.copy(magdata[:, i])
 
 # Dragan data
-datafitres = 'ps1_cuts.fitres'
+datafitres = 'dragan2.fitres'
 os.chdir(homedir + '/dragan')
 with open(datafitres, 'r') as f:
     for line in f:
@@ -214,7 +199,7 @@ datavars = datavars.split()
 datavars.remove('VARNAMES:')
 datavars.remove('FIELD')
 datavars.remove('CID')
-columns = tuple(list(range(2, 4)) + list(range(5, 30)))
+columns = tuple(list(range(2, 5)) + list(range(6, 42)))
 dragan = np.loadtxt(datafitres, dtype=float, skiprows=18, usecols=columns)
 for i in range(datavarscount):
     if datavars[i] == 'IDSURVEY':
@@ -528,16 +513,17 @@ def magmaker(massarr, datamass, datamag, interval=0.5):
     # print(len(magmeanbins), magmeanbins)
     global_magmean = np.mean(datamag)
     global_magstd = np.std(datamag)
-    # print(global_magmean, global_magstd)
+    print(global_magmean, global_magstd)
     meanfunc = interp.interp1d(massbins, magmeanbins, bounds_error=False, fill_value=global_magmean)
     sigfunc = interp.interp1d(massbins, magsigbins, bounds_error=False, fill_value=global_magstd)
+    print(meanfunc(11.5))
     for i in range(len(massarr)):
         mu = meanfunc(massarr[i])
         sigma = sigfunc(massarr[i])
         mag = np.random.normal(loc=mu, scale=sigma)
         magarr[i] = mag
-        # if np.isnan(mag):
-        #     print(massarr[i], mag, mu, sigma)
+        if np.isnan(mag):
+            print(massarr[i], mag, mu, sigma)
     return magarr
 
 # asym gauss dists for mass, c and x1, respectively
@@ -605,12 +591,12 @@ elif sampletype == 1:
         while 10 + buff * wgtstep >= m >= 10 - buff * wgtstep:
             m = 2 / 3 * np.random.randn() + 10.
 elif sampletype == 2:
-    masssamplefinal = 6. * np.random.random(sample) + 7.
-elif sampletype == 3:
     masssamplefinal = np.empty([sample])
     for m in masssamplefinal:
         m = np.random.choice([8., 12.])
-
+elif sampletype == 3:
+    masssamplefinal = 6. * np.random.random(sample) + 7.
+print(masssamplefinal)
 # generate mag samples:
 gobssamp = magmaker(masssamplefinal, maghostmass, maggobs)
 robssamp = magmaker(masssamplefinal, maghostmass, magrobs)
@@ -621,33 +607,9 @@ rabssamp = magmaker(masssamplefinal, maghostmass, magrabs)
 iabssamp = magmaker(masssamplefinal, maghostmass, magiabs)
 zabssamp = magmaker(masssamplefinal, maghostmass, magrabs)
 
-plt.scatter(maghostmass, magrobs, marker='x', alpha=0.9, c='red', label='data')
-plt.scatter(masssamplefinal, robssamp, alpha=0.5, label='generated')
-plt.xlabel('logmass')
-plt.ylabel('mag r_obs')
-plt.show()
-
-print(np.mean(datahostmass), np.mean(maghostmass))
-print(np.std(datahostmass), np.std(maghostmass))
-print(len(datahostmass), len(maghostmass))
-plt.subplot(121)
-plt.hist(masssamplefinal, normed=True)
-plt.xlim([7, 12])
-plt.title('sample PS1')
-plt.xlabel('logmass')
-plt.subplot(122)
-plt.hist(maghostmass, normed=True)
-plt.title('Dave PS1')
-plt.xlim([7, 12])
-plt.xlabel('logmass')
-plt.show()
-
-plt.scatter(masssamplefinal, x1sample)
-plt.title('x1')
-plt.show()
-
-plt.scatter(masssamplefinal, csample)
-plt.show()
+# plt.scatter(maghostmass, magrobs, marker='x', alpha=0.9, c='red')
+# plt.scatter(masssamplefinal, robssamp, alpha=0.9)
+# plt.show()
 
 # create HOSTLIB file
 os.chdir(homedir + '/hostlib/{}'.format(surv))

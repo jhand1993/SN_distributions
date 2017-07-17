@@ -17,10 +17,10 @@ x1p1 = [1.141, 0.100, 1.653]
 
 # G10 PS1 values:
 cp2 = [-0.077, 0.121, 0.029]
-x1p2 = [0.604, 0.363, 1.029]
+x1p2 = [0.514, 0.37, 0.963
 
 # G10 SNLS values:
-cp3 = [-0.065, 0.120, 0.044]
+cp3 = [-0.077, 0.121, 0.029]
 x1p3 = [0.964, 0.282, 1.232]
 
 # important things?
@@ -57,20 +57,20 @@ os.chdir(homedir + '/fitres/{}'.format(surv))
 # sim1 results
 columns = tuple(list(range(1, 4)) + list(range(5, 39)))
 fitres = '{}_WFIRST_{}1.fitres'.format(init, surv)
-with open(fitres, 'r') as f:
-    for line in f:
-        if 'VARNAME' in line:
-            var = line
-            break
-with open(fitres, 'r') as f:
-    for line in f:
-        if 'NVAR' in line:
-            varscount = int(line.split(' ')[1]) - 2
-            break
-var = var.split()
-var.remove('VARNAMES:')
-var.remove('FIELD')
 try:
+    with open(fitres, 'r') as f:
+        for line in f:
+            if 'VARNAME' in line:
+                var = line
+                break
+    with open(fitres, 'r') as f:
+        for line in f:
+            if 'NVAR' in line:
+                varscount = int(line.split(' ')[1]) - 2
+                break
+    var = var.split()
+    var.remove('VARNAMES:')
+    var.remove('FIELD')
     datasim1 = np.loadtxt(fitres, dtype=float, skiprows=12, usecols=columns)
     for i in range(varscount):
         if var[i] == 'HOST_LOGMASS':
@@ -80,27 +80,32 @@ try:
         elif var[i] == 'c':
             sim1c = np.copy(datasim1[:, i])
 except ValueError:
-    print('Warning: Fitres iteration 1 not imported')
+    print('ValueError raised.')
+    print('Warning: Fitres iteration 1 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
+    pass
+except FileNotFoundError:
+    print('FileNotFoundError raised.')
+    print('Warning: Fitres iteration 1 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
     pass
 except:
     raise
 
 # sim2 results
 fitres = '{}_WFIRST_{}2.fitres'.format(init, surv)
-with open(fitres, 'r') as f:
-    for line in f:
-        if 'VARNAME' in line:
-            var = line
-            break
-with open(fitres, 'r') as f:
-    for line in f:
-        if 'NVAR' in line:
-            varscount = int(line.split(' ')[1]) - 2
-            break
-var = var.split()
-var.remove('VARNAMES:')
-var.remove('FIELD')
 try:
+    with open(fitres, 'r') as f:
+        for line in f:
+            if 'VARNAME' in line:
+                var = line
+                break
+    with open(fitres, 'r') as f:
+        for line in f:
+            if 'NVAR' in line:
+                varscount = int(line.split(' ')[1]) - 2
+                break
+    var = var.split()
+    var.remove('VARNAMES:')
+    var.remove('FIELD')
     datasim2 = np.loadtxt(fitres, dtype=float, skiprows=12, usecols=columns)
     for i in range(varscount):
         if var[i] == 'HOST_LOGMASS':
@@ -110,27 +115,32 @@ try:
         elif var[i] == 'c':
             sim2c = np.copy(datasim2[:, i])
 except ValueError:
-    print('Warning: Fitres iteration 2 not imported')
+    print('ValueError raised.')
+    print('Warning: Fitres iteration 2 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
+    pass
+except FileNotFoundError:
+    print('FileNotFoundError raised.')
+    print('Warning: Fitres iteration 2 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
     pass
 except:
     raise
 
 # sim3 results
 fitres = '{}_WFIRST_{}3.fitres'.format(init, surv)
-with open(fitres, 'r') as f:
-    for line in f:
-        if 'VARNAME' in line:
-            var = line
-            break
-with open(fitres, 'r') as f:
-    for line in f:
-        if 'NVAR' in line:
-            varscount = int(line.split(' ')[1]) - 2
-            break
-var = var.split()
-var.remove('VARNAMES:')
-var.remove('FIELD')
 try:
+    with open(fitres, 'r') as f:
+        for line in f:
+            if 'VARNAME' in line:
+                var = line
+                break
+    with open(fitres, 'r') as f:
+        for line in f:
+            if 'NVAR' in line:
+                varscount = int(line.split(' ')[1]) - 2
+                break
+    var = var.split()
+    var.remove('VARNAMES:')
+    var.remove('FIELD')
     datasim3 = np.loadtxt(fitres, dtype=float, skiprows=12, usecols=columns)
     for i in range(varscount):
         if var[i] == 'HOST_LOGMASS':
@@ -140,7 +150,12 @@ try:
         elif var[i] == 'c':
             sim3c = np.copy(datasim3[:, i])
 except ValueError:
-    print('Warning: Fitres iteration 3 not imported')
+    print('ValueError raised.')
+    print('Warning: Fitres iteration 3 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
+    pass
+except FileNotFoundError:
+    print('FileNotFoundError raised.')
+    print('Warning: Fitres iteration 3 not imported.  Directory given: ' + os.getcwd() + '.  File given: ' + fitres + '.')
     pass
 except:
     raise
@@ -466,47 +481,59 @@ s = [0.5, 1., 0.1]
 
 # second input argument determines weight map iteration step
 argv2 = int(sys.argv[2])  # cast second argv as int for comparison
-if argv2 == 0:
-    masssamplefinal = masssample
-elif argv2 == 1:
-    sim1massx1cmap = digitize3D(sim1mass, sim1x1, sim1c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
-    datamassx1cmap = digitize3D(datahostmass, datax1, datac, massx1cbounds, step1=s[0], step2=s[1], step3=s[2],
-                                norm=True)
-    # weighted mass sample
-    megamasssample1, wmap1 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim1massx1cmap,
-                                           step1=s[0], step2=s[1], step3=s[2])
-    masssamplefinal = megamasssample1
-elif argv2 == 2:
-    sim1massx1cmap = digitize3D(sim1mass, sim1x1, sim1c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
-    sim2massx1cmap = digitize3D(sim2mass, sim2x1, sim2c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
-    datamassx1cmap = digitize3D(datahostmass, datax1, datac, massx1cbounds, step1=s[0], step2=s[1], step3=s[2],
-                                norm=True)
-    # weighted mass samples
-    megamasssample1, wmap1 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim1massx1cmap,
-                                           step1=s[0], step2=s[1], step3=s[2])
-    megamasssample2, wmap2 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim2massx1cmap,
-                                           wmap0=wmap1,
-                                           step1=s[0], step2=s[1], step3=s[2])
-    masssamplefinal = megamasssample2
-elif argv2 == 3:
-    sim1massx1cmap = digitize3D(sim1mass, sim1x1, sim1c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
-    sim2massx1cmap = digitize3D(sim2mass, sim2x1, sim2c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
-    sim3massx1cmap = digitize3D(sim3mass, sim3x1, sim3c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
-    datamassx1cmap = digitize3D(datahostmass, datax1, datac, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
+if sampletype == 0:
+    if argv2 == 0:
+        masssamplefinal = masssample
+    elif argv2 == 1:
+        sim1massx1cmap = digitize3D(sim1mass, sim1x1, sim1c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
+        datamassx1cmap = digitize3D(datahostmass, datax1, datac, massx1cbounds, step1=s[0], step2=s[1], step3=s[2],
+                                    norm=True)
+        # weighted mass sample
+        megamasssample1, wmap1 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim1massx1cmap,
+                                               step1=s[0], step2=s[1], step3=s[2])
+        masssamplefinal = megamasssample1
+    elif argv2 == 2:
+        sim1massx1cmap = digitize3D(sim1mass, sim1x1, sim1c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
+        sim2massx1cmap = digitize3D(sim2mass, sim2x1, sim2c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
+        datamassx1cmap = digitize3D(datahostmass, datax1, datac, massx1cbounds, step1=s[0], step2=s[1], step3=s[2],
+                                    norm=True)
+        # weighted mass samples
+        megamasssample1, wmap1 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim1massx1cmap,
+                                               step1=s[0], step2=s[1], step3=s[2])
+        megamasssample2, wmap2 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim2massx1cmap,
+                                               wmap0=wmap1,
+                                               step1=s[0], step2=s[1], step3=s[2])
+        masssamplefinal = megamasssample2
+    elif argv2 == 3:
+        sim1massx1cmap = digitize3D(sim1mass, sim1x1, sim1c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
+        sim2massx1cmap = digitize3D(sim2mass, sim2x1, sim2c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
+        sim3massx1cmap = digitize3D(sim3mass, sim3x1, sim3c, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
+        datamassx1cmap = digitize3D(datahostmass, datax1, datac, massx1cbounds, step1=s[0], step2=s[1], step3=s[2], norm=True)
 
-    # weighted mass samples
-    megamasssample1, wmap1 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim1massx1cmap,
-                                           step1=s[0], step2=s[1], step3=s[2])
-    megamasssample2, wmap2 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim2massx1cmap,
-                                           wmap0=wmap1, step1=s[0], step2=s[1], step3=s[2])
-    megamasssample3, wmap3 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim3massx1cmap,
-                                           wmap0=wmap2, step1=s[0], step2=s[1], step3=s[2])
+        # weighted mass samples
+        megamasssample1, wmap1 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim1massx1cmap,
+                                               step1=s[0], step2=s[1], step3=s[2])
+        megamasssample2, wmap2 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim2massx1cmap,
+                                               wmap0=wmap1, step1=s[0], step2=s[1], step3=s[2])
+        megamasssample3, wmap3 = weightmaker3D(x1sample, csample, massx1cbounds, datamassx1cmap, sim3massx1cmap,
+                                               wmap0=wmap2, step1=s[0], step2=s[1], step3=s[2])
 
-    masssamplefinal = megamasssample3
-    # print(np.mean(masssamplefinal), np.min(masssamplefinal), np.max(masssamplefinal))
-else:
-    # raise error is iteration number is not valid.
-    raise IterError('Must choose iteration number of 0, 1, 2, or 3.')
+        masssamplefinal = megamasssample3
+        # print(np.mean(masssamplefinal), np.min(masssamplefinal), np.max(masssamplefinal))
+    else:
+        # raise error is iteration number is not valid.
+        raise IterError('Must choose iteration number of 0, 1, 2, or 3.')
+elif sampletype == 1:
+    masssamplefinal = 2 / 3 * np.random.randn(sample) + 10.
+    for m in masssamplefinal:
+        while 10 + buff * wgtstep >= m >= 10 - buff * wgtstep:
+            m = 2 / 3 * np.random.randn() + 10.
+elif sampletype == 2:
+    masssamplefinal = 6. * np.random.random(sample) + 7.
+elif sampletype == 3:
+    masssamplefinal = np.empty([sample])
+    for m in masssamplefinal:
+        m = np.random.choice([8., 12.])
 # create HOSTLIB file
 os.chdir(homedir + '/hostlib/{}'.format(surv))
 hostlib = open('{}_{}_{}_{}.HOSTLIB'.format(init, hostlibsuffix,  surv, smeararg), mode='w')
@@ -527,8 +554,7 @@ else:
     for i in np.arange(10. + wgtstep / 2, int(max(masssamplefinal)) + 3, wgtstep):
         hostlib.write('WGT:   ' + str(i) + '   1   -{}\n'.format(massstep))
 
-# write galaxy sample to file
-hostlib.write('\nNVAR: 7\nVARNAMES: GALID ZTRUE c x1 LOGMASS_TRUE LOGMASS_OBS LOGMASS_ERR\n')
+hostlib.write('\n') # add a space between wgt map and host list
 
 # use constant noise error
 if not err:
@@ -536,6 +562,7 @@ if not err:
         ztrue = zsample[i]
         c = csample[i]
         x1 = x1sample[i]
+        """
         if sampletype == 0:
             logmass_true = masssamplefinal[i]
         elif sampletype == 1:
@@ -546,6 +573,8 @@ if not err:
             logmass_true = 6. * np.random.random() + 7.
         elif sampletype == 2:
             logmass_true = np.random.choice([8., 12.])
+        """
+        logmass_true = masssamplefinal[i]
         noise = noiseerr * np.random.randn()
         galid = str(i)
         logmass_obs = str(logmass_true + noise)
@@ -558,6 +587,7 @@ else:
         ztrue = zsample[i]
         c = csample[i]
         x1 = x1sample[i]
+        """
         if sampletype == 0:
             logmass_true = masssamplefinal[i]
         elif sampletype == 1:
@@ -568,6 +598,8 @@ else:
             logmass_true = 6. * np.random.random() + 7.
         elif sampletype == 2:
             logmass_true = np.random.choice([8., 12.])
+        """
+        logmass_true = masssamplefinal[i]
         noise = masserrsample[i] * np.random.randn()
         galid = str(i)
         logmass_obs = str(logmass_true + noise)
